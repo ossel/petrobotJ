@@ -13,8 +13,9 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException(
-                    "No Telegram API Token (args[0]) or Chat ID (args[1]) provided.");
+            String errorMessage = "No Telegram API Token (args[0]) or Chat ID (args[1]) provided.";
+            LOG.error(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
         String token = args[0];
         String chatId = args[1];

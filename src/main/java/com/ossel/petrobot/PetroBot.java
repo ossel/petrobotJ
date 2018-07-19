@@ -32,7 +32,7 @@ public class PetroBot extends TelegramLongPollingBot {
 
     public void onUpdateReceived(Update data) {
         System.out.println("Update: " + data.toString());
-        Request request = Util.getCommandFromMessage(data.getMessage().getText());
+        Request request = Util.getRequestFromMessage(data.getMessage().getText());
         String username = Util.getName(data.getMessage().getFrom());
         LOG.info(request.toString() + "\nRaw: " + data.getMessage().getText());
         switch (request.getCommand()) {
@@ -74,7 +74,7 @@ public class PetroBot extends TelegramLongPollingBot {
                 dao.addTodoItem(new Item(request.getItem(), username));
                 break;
             }
-            case DELETE_TODO_LIST: {
+            case DELETE_TODO_ITEM: {
                 try {
                     int itemNumber = Integer.parseInt(request.getItem().trim());
                     boolean deleted = dao.deleteTodoItem(itemNumber);

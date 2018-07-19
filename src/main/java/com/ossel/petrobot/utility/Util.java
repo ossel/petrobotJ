@@ -32,14 +32,14 @@ public class Util {
         return b.toString();
     }
 
-    public static Request getCommandFromMessage(String message) {
+    public static Request getRequestFromMessage(String message) {
         if (message != null) {
-            if (message.startsWith("/todo_loesche"))
-                return new Request(BotCommand.DELETE_TODO_LIST, "");
+            if (message.startsWith("/todo_loesche") || message.startsWith("/todo_loeschen"))
+                return new Request(BotCommand.DELETE_TODO_ITEM, getItemFromRawMessage(message));
             if (message.startsWith("/todolist"))
                 return new Request(BotCommand.SHOW_TODO_LIST, "");
             if (message.startsWith("/todo"))
-                return new Request(BotCommand.ADD_TODO_ITEM, getItem("/todo", message));
+                return new Request(BotCommand.ADD_TODO_ITEM, getItemFromRawMessage(message));
 
             if (message.startsWith("/einkaufsliste_loeschen")
                     || message.startsWith("/einkaufliste_loeschen"))
@@ -47,7 +47,7 @@ public class Util {
             if (message.startsWith("/einkaufsliste") || message.startsWith("/einkaufliste"))
                 return new Request(BotCommand.SHOW_SHOPPING_LIST, "");
             if (message.startsWith("/einkauf"))
-                return new Request(BotCommand.ADD_SHOPPING_ITEM, getItem("/einkauf", message));
+                return new Request(BotCommand.ADD_SHOPPING_ITEM, getItemFromRawMessage(message));
 
             if (message.startsWith("/pool"))
                 return new Request(BotCommand.SHOW_POOL_TEMPERATURE, "");
@@ -63,12 +63,23 @@ public class Util {
         return new Request(BotCommand.UNKNOWN, "");
     }
 
-    private static String getItem(String prefix, String rawMessage) {
-        String result = rawMessage.split(prefix)[1];
-        if (result.toLowerCase().startsWith("@petrobot")) {
-            return result.split("@petrobot")[1];
+    private static String getItemFromRawMessage(final String rawMessage) {
+        String text = null;
+        if (rawMessage.startsWith("/todo"))
+            text = rawMessage.substring("/todo".length());
+        if (rawMessage.startsWith("/todo_loesche"))
+            text = rawMessage.substring("/todo_loesche".length());
+        if (rawMessage.startsWith("/todo_loeschen"))
+            text = rawMessage.substring("/todo_loeschen".length());
+        if (rawMessage.startsWith("/einkauf"))
+            text = rawMessage.substring("/einkauf".length());
+        if (text.toLowerCase().startsWith("@petrobot")) {
+            text = text.substring("@petrobot".length());
         }
-        return result;
+        if (text.startsWith(" ")) {
+            text = text.substring(1);
+        }
+        return text;
     }
 
     public static String getName(User user) {

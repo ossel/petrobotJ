@@ -1,7 +1,7 @@
 package com.ossel.petrobot.data.enums;
 
 public enum BotCommand {
-    DELETE_TODO_LIST, SHOW_TODO_LIST, ADD_TODO_ITEM,
+    DELETE_TODO_ITEM, SHOW_TODO_LIST, ADD_TODO_ITEM,
 
     DELETE_SHOPPING_LIST, SHOW_SHOPPING_LIST, ADD_SHOPPING_ITEM,
 
