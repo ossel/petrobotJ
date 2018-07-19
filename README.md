@@ -1,4 +1,5 @@
 # petrobotJ
+Java Implementierung des PetorBots
 ## build
 maven goal: clean compile assembly:single
 ## run
