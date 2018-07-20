@@ -1,6 +1,6 @@
 # petrobotJ
 Java Implementierung des PetorBots
 ## build
-maven goal: clean compile assembly:single
+maven goal: clean install package
 ## run
 java -jar \<token> <chat_id>

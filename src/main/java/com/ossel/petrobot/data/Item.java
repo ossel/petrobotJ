@@ -13,7 +13,7 @@ public class Item {
 
     private String creator;
 
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     public Item(String item, String creator) {

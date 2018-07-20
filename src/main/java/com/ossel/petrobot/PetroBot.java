@@ -9,6 +9,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import com.ossel.petrobot.data.Item;
 import com.ossel.petrobot.data.Request;
+import com.ossel.petrobot.data.Temperature;
 import com.ossel.petrobot.services.Dao;
 import com.ossel.petrobot.utility.Util;
 
@@ -39,7 +40,7 @@ public class PetroBot extends TelegramLongPollingBot {
             case SHOW_SHOPPING_LIST: {
                 if (dao.getShoppingList().isEmpty()) {
                     sendMessage(
-                            "Einkaufsliste leer. Tippe '/einkauf <item>' um etwas hinzuzufügen.");
+                            "Einkaufsliste leer. Tippe '/einkauf <item>' um etwas hinzuzufÃ¼gen.");
                 } else {
                     sendMessage(Util.formatList(dao.getShoppingList()));
                 }
@@ -55,16 +56,22 @@ public class PetroBot extends TelegramLongPollingBot {
             }
             case DELETE_SHOPPING_LIST: {
                 dao.deleteShoppingList();
-                sendMessage("Einkaufsliste gelöscht.");
+                sendMessage("Einkaufsliste gelÃ¶scht.");
                 break;
             }
             case SHOW_POOL_TEMPERATURE: {
-                sendMessage("Die Pooltemperatur beträgt 20 Grad Celsius.");
+                Temperature temp = dao.getTemperature();
+                if (temp == null) {
+                    sendMessage("Der Sernsor ist nicht angeschlossen.");
+                } else {
+                    sendMessage("Die Pooltemperatur betrÃ¤gt " + temp.getValue() + " Grad. ("
+                            + temp.getTime() + ")");
+                }
                 break;
             }
             case SHOW_TODO_LIST: {
                 if (dao.getTodoList().isEmpty()) {
-                    sendMessage("Todo-Liste leer. Tippe '/todo <item>' um etwas hinzuzufügen.");
+                    sendMessage("Todo-Liste leer. Tippe '/todo <item>' um etwas hinzuzufÃ¼gen.");
                 } else {
                     sendMessage(Util.formatList(dao.getTodoList()));
                 }
@@ -79,9 +86,9 @@ public class PetroBot extends TelegramLongPollingBot {
                     int itemNumber = Integer.parseInt(request.getItem().trim());
                     boolean deleted = dao.deleteTodoItem(itemNumber);
                     if (deleted)
-                        sendMessage("Item <" + itemNumber + "> gelöscht.");
+                        sendMessage("Item <" + itemNumber + "> gelÃ¶scht.");
                     else
-                        sendMessage("Item <" + itemNumber + "> konnte nicht gelöscht werden.");
+                        sendMessage("Item <" + itemNumber + "> konnte nicht gelÃ¶scht werden.");
                 } catch (NumberFormatException e) {
                     sendMessage("Der Wert <" + request.getItem().trim()
                             + "> ist keine positive ganze Zahl.");
@@ -91,7 +98,7 @@ public class PetroBot extends TelegramLongPollingBot {
             case SHOW_DUCK_STATS: {
                 if (dao.getDuckStats().isEmpty()) {
                     sendMessage(
-                            "Noch keine Entenpunkte vorhanden. Tippe /entenpapa oder /entenmama um den Entendienst zu übernehmen und Entenpunkte zu sammeln.");
+                            "Noch keine Entenpunkte vorhanden. Tippe /entenpapa oder /entenmama um den Entendienst zu Ã¼bernehmen und Entenpunkte zu sammeln.");
                 } else {
                     sendMessage(Util.toStatsString(dao.getDuckStats()));
                 }
@@ -100,37 +107,37 @@ public class PetroBot extends TelegramLongPollingBot {
             case SHOW_DUCK_FATHER: {
                 if (dao.getDuckFather() == null) {
                     sendMessage(
-                            "Heute ist noch niemand für die Enten zuständig. Tippe /entenpapa oder /entenmama um den Entendienst zu übernehmen und Entenpunkte zu sammeln.");
+                            "Heute ist noch niemand fÃ¼r die Enten zustÃ¤ndig. Tippe /entenpapa oder /entenmama um den Entendienst zu Ã¼bernehmen und Entenpunkte zu sammeln.");
                 } else {
-                    sendMessage(dao.getDuckFather() + " ist heute für die Enten zuständig.");
+                    sendMessage(dao.getDuckFather() + " ist heute fÃ¼r die Enten zustÃ¤ndig.");
                 }
                 break;
             }
             case CLAIM_DUCK_RESPONSIBILITY: {
                 if (dao.getDuckFather() != null) {
                     sendMessage(dao.getDuckFather()
-                            + " ist heute bereits für die Enten zuständig. Versuche es morgen erneut.");
+                            + " ist heute bereits fÃ¼r die Enten zustÃ¤ndig. Versuche es morgen erneut.");
                     break;
                 }
                 Calendar cal = Calendar.getInstance();
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
                 if (hour < 18) {
                     sendMessage(
-                            "Die Enten müssen noch nicht ins Bett. Versuche es ab 18:00 erneut!");
+                            "Die Enten mÃ¼ssen noch nicht ins Bett. Versuche es ab 18:00 erneut!");
                 } else {
                     Map<String, Integer> duckStats = dao.setDuckFather(username);
                     if (duckStats.get(username) != 1) {
-                        sendMessage(username + " ist heute für die Enten zuständig und hat nun "
+                        sendMessage(username + " ist heute fÃ¼r die Enten zustÃ¤ndig und hat nun "
                                 + duckStats.get(username) + " Entenpunkte.");
                     } else {
                         sendMessage(username
-                                + " ist heute für die Enten zuständig und bekommt seinen ersten Entenpunkt.");
+                                + " ist heute fÃ¼r die Enten zustÃ¤ndig und bekommt seinen ersten Entenpunkt.");
                     }
                 }
                 break;
             }
             case UNKNOWN: {
-                sendMessage("Unbekannter Befehl. Tippe / für die Liste aller Befehle.");
+                sendMessage("Unbekannter Befehl. Tippe / fÃ¼r die Liste aller Befehle.");
                 break;
             }
             default:
@@ -159,7 +166,7 @@ public class PetroBot extends TelegramLongPollingBot {
 
     public void sendDuckQuestion() {
         String question =
-                "Wer kümmert sich heute um die Enten? Tippe /entenpapa oder /entenmama um die Verantwortung zu übernehmen.";
+                "Wer kÃ¼mmert sich heute um die Enten? Tippe /entenpapa oder /entenmama um die Verantwortung zu Ã¼bernehmen.";
         LOG.info(question);
         sendMessage(question);
     }

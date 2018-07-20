@@ -1,8 +1,10 @@
 package com.ossel.petrobot.utility;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.telegram.telegrambots.api.objects.User;
@@ -136,6 +138,14 @@ public class Util {
                 }
         }
         return items;
+    }
+
+    public static boolean isToday(Date time) {
+        Calendar targetTime = Calendar.getInstance();
+        targetTime.setTime(time);
+        Calendar today = Calendar.getInstance();
+        return targetTime.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && targetTime.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
     }
 
 }

@@ -2,10 +2,12 @@ package com.ossel.petrobot;
 
 import java.util.Calendar;
 import org.apache.log4j.Logger;
+import org.springframework.boot.SpringApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import com.ossel.petrobot.services.Dao;
+import com.ossel.petrobot.services.HttpServer;
 
 public class Main {
 
@@ -50,6 +52,7 @@ public class Main {
             e.printStackTrace();
         }
         LOG.info("PetroBot started...");
+        SpringApplication.run(HttpServer.class, args);
     }
 
 }
