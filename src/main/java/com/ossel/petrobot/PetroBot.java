@@ -133,7 +133,7 @@ public class PetroBot extends TelegramLongPollingBot {
                                 + duckStats.get(username) + " Entenpunkte.");
                     } else {
                         sendMessage(username
-                                + " ist heute für die Enten zuständig und bekommt seinen ersten Entenpunkt.");
+                                + " ist heute für die Enten zuständig und bekommt den ersten Entenpunkt.");
                     }
                 }
                 break;
