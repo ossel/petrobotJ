@@ -1,9 +1,11 @@
 package com.ossel.petrobot;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -151,7 +153,8 @@ public class PetroBot extends TelegramLongPollingBot {
     }
 
 
-    private void sendMessage(String text) {
+    public void sendMessage(String text) {
+        LOG.info("Send message: " + text);
         SendMessage m = new SendMessage(CHAT_ID, text);
         try {
             sendMessage(m);
@@ -164,10 +167,15 @@ public class PetroBot extends TelegramLongPollingBot {
         sendMessage("Bin wieder online!");
     }
 
-    public void sendDuckQuestion() {
-        String question =
-                "Wer kümmert sich heute um die Enten? Tippe /entenpapa oder /entenmama um die Verantwortung zu übernehmen.";
-        LOG.info(question);
-        sendMessage(question);
+    public void sendPhoto(String filename) {
+        SendPhoto message = new SendPhoto();
+        message.setChatId(CHAT_ID);
+        File f = new File(filename);
+        message.setNewPhoto(f);
+        try {
+            sendPhoto(message);
+        } catch (TelegramApiException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 }

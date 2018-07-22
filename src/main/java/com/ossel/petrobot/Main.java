@@ -37,9 +37,28 @@ public class Main {
                         try {
                             Thread.sleep(1000 * 60 * 15); // every 15 minutes
                             Calendar cal = Calendar.getInstance();
+                            int every = 45; // minutes
                             if (cal.get(Calendar.HOUR_OF_DAY) >= 18
                                     && Dao.getInstance().getDuckFather() == null) {
-                                petroBot.sendDuckQuestion();
+                                petroBot.sendMessage(
+                                        "Wer kümmert sich heute um die Enten?\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendMessage(
+                                        "Die Enten müssen langsam ins Bett!\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendMessage(
+                                        "Qick, Queck und Quack sind müde und würden gerne schlafen gehen!\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendMessage(
+                                        "Die Enten müssen ins Bett!\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendMessage(
+                                        "Haaaallllooo... Kümmert euch um die Enten!\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendMessage(
+                                        "Alarm der Fuchs kommt und die Enten sind noch draußen!\nTippe /entenpapa und sammle einen Entenpunkt.");
+                                Thread.sleep(1000 * 60 * every);
+                                petroBot.sendPhoto("fuchs.png");
                             }
                         } catch (InterruptedException e) {
                             LOG.error(e.getMessage(), e);
