@@ -113,7 +113,7 @@ public class Util {
                 return p1.getPoints() - p2.getPoints();
             }
         });
-        StringBuilder result = new StringBuilder("Ranking:\n");
+        StringBuilder result = new StringBuilder("Entenpunkte:\n");
         int c = 1;
         for (Person person : orderedList) {
             if (c != 1)

@@ -62,7 +62,7 @@ public class PetroBot extends TelegramLongPollingBot {
             case SHOW_POOL_TEMPERATURE: {
                 Temperature temp = dao.getTemperature();
                 if (temp == null) {
-                    sendMessage("Der Sernsor ist nicht angeschlossen.");
+                    sendMessage("Der Sensor ist nicht angeschlossen.");
                 } else {
                     sendMessage("Die Pooltemperatur beträgt " + temp.getValue() + " Grad. ("
                             + temp.getTime() + ")");
