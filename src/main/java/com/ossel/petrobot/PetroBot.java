@@ -138,6 +138,16 @@ public class PetroBot extends TelegramLongPollingBot {
                 }
                 break;
             }
+            case DEBUG: {
+                LOG.info("###### DEBUG ######");
+                LOG.info("# duck father: " + dao.getDuckFather());
+                LOG.info("# " + Util.toStatsString(dao.getDuckStats()));
+                LOG.info("# pool temperature: " + dao.getTemperature());
+                LOG.info("# todo: " + Util.formatList(dao.getTodoList()));
+                LOG.info("# shopping: " + Util.formatList(dao.getShoppingList()));
+                LOG.info("###### DEBUG ######");
+                break;
+            }
             case UNKNOWN: {
                 sendMessage("Unbekannter Befehl. Tippe / für die Liste aller Befehle.");
                 break;
@@ -180,7 +190,7 @@ public class PetroBot extends TelegramLongPollingBot {
     }
 
     public void sendRemindingMessage(int msgNumber) {
-        switch (msgNumber){
+        switch (msgNumber) {
             case 1: {
                 sendMessage(
                         "Die Enten müssen langsam ins Bett!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");

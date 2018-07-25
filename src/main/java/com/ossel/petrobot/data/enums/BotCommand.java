@@ -9,6 +9,8 @@ public enum BotCommand {
 
     SHOW_DUCK_FATHER, CLAIM_DUCK_RESPONSIBILITY, SHOW_DUCK_STATS,
 
+    DEBUG,
+
     UNKNOWN;
 
 }
