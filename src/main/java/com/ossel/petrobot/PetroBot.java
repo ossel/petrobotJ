@@ -17,14 +17,14 @@ import com.ossel.petrobot.utility.Util;
 
 public class PetroBot extends TelegramLongPollingBot {
 
-    public static final Logger LOG = Logger.getLogger(PetroBot.class);
+    private static final Logger LOG = Logger.getLogger(PetroBot.class);
 
     private String CHAT_ID;
     private String API_TOKEN;
 
-    Dao dao = Dao.getInstance();
+    private Dao dao = Dao.getInstance();
 
-    public PetroBot(String token, String chatId) {
+    PetroBot(String token, String chatId) {
         CHAT_ID = chatId;
         API_TOKEN = token;
     }
@@ -153,7 +153,7 @@ public class PetroBot extends TelegramLongPollingBot {
     }
 
 
-    public void sendMessage(String text) {
+    private void sendMessage(String text) {
         LOG.info("Send message: " + text);
         SendMessage m = new SendMessage(CHAT_ID, text);
         try {
@@ -167,7 +167,7 @@ public class PetroBot extends TelegramLongPollingBot {
         sendMessage("Bin wieder online!");
     }
 
-    public void sendPhoto(String filename) {
+    private void sendPhoto(String filename) {
         SendPhoto message = new SendPhoto();
         message.setChatId(CHAT_ID);
         File f = new File(filename);
@@ -178,4 +178,42 @@ public class PetroBot extends TelegramLongPollingBot {
             LOG.error(e.getMessage(), e);
         }
     }
+
+    public void sendRemindingMessage(int msgNumber) {
+        switch (msgNumber){
+            case 1: {
+                sendMessage(
+                        "Die Enten müssen langsam ins Bett!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+                break;
+            }
+            case 2: {
+                sendMessage(
+                        "Qick, Queck und Quack sind müde und würden gerne schlafen gehen!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+                break;
+            }
+            case 3: {
+                sendMessage(
+                        "Die Enten müssen ins Bett!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+                break;
+            }
+            case 4: {
+                sendMessage(
+                        "Haaaallllooo... Kümmert euch um die Enten!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+                break;
+            }
+            case 5: {
+                sendMessage(
+                        "Alarm der Fuchs kommt und die Enten sind noch draußen!\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+                break;
+            }
+            case 6: {
+                sendPhoto("fuchs.png");
+                break;
+            }
+            default:
+                sendMessage(
+                        "Wer kümmert sich heute um die Enten?\nTippe /entenpapa oder /entenmama und sammle einen Entenpunkt.");
+        }
+    }
+
 }

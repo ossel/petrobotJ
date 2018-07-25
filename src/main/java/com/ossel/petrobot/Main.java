@@ -11,7 +11,7 @@ import com.ossel.petrobot.services.HttpServer;
 
 public class Main {
 
-    public static final Logger LOG = Logger.getLogger(Main.class);
+    private static final Logger LOG = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
         if (args.length < 2) {
@@ -29,40 +29,22 @@ public class Main {
             final PetroBot petroBot = new PetroBot(token, chatId);
             petroBot.sendStartupMessage();
             telegramBotsApi.registerBot(petroBot);
-            Thread t = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    while (true) {
-                        try {
-                            Thread.sleep(1000 * 60 * 15); // every 15 minutes
-                            Calendar cal = Calendar.getInstance();
-                            int every = 45; // minutes
-                            if (cal.get(Calendar.HOUR_OF_DAY) >= 18
-                                    && Dao.getInstance().getDuckFather() == null) {
-                                petroBot.sendMessage(
-                                        "Wer kümmert sich heute um die Enten?\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendMessage(
-                                        "Die Enten müssen langsam ins Bett!\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendMessage(
-                                        "Qick, Queck und Quack sind müde und würden gerne schlafen gehen!\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendMessage(
-                                        "Die Enten müssen ins Bett!\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendMessage(
-                                        "Haaaallllooo... Kümmert euch um die Enten!\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendMessage(
-                                        "Alarm der Fuchs kommt und die Enten sind noch draußen!\nTippe /entenpapa und sammle einen Entenpunkt.");
-                                Thread.sleep(1000 * 60 * every);
-                                petroBot.sendPhoto("fuchs.png");
-                            }
-                        } catch (InterruptedException e) {
-                            LOG.error(e.getMessage(), e);
+            Thread t = new Thread(() -> {
+                int counter = 0;
+                while (true) {
+                    try {
+                        Calendar cal = Calendar.getInstance();
+                        if (cal.get(Calendar.HOUR_OF_DAY) >= 18
+                                && Dao.getInstance().getDuckFather() == null) {
+                            petroBot.sendRemindingMessage(counter);
+                            counter ++;
+                            Thread.sleep(1000 * 60 * 30); // wait 30 minutes
+                        }else{
+                            counter = 0;
                         }
+                        Thread.sleep(1000 * 60 * 15); // every 15 minutes
+                    } catch (InterruptedException e) {
+                        LOG.error(e.getMessage(), e);
                     }
                 }
             });

@@ -17,12 +17,6 @@ public class UtilTest {
         Assert.assertEquals(BotCommand.DELETE_TODO_ITEM, request.getCommand());
     }
 
-    @Test
-    public void testIsToday() throws ParseException {
-        Date lastClaimTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
-                .parse("2018-39-20 11:39:10,Dany Bro".split(",")[0]);
-        Assert.assertTrue(Util.isToday(lastClaimTime));
-    }
 
 
 }
