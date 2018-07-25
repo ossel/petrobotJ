@@ -10,8 +10,6 @@ import java.util.Map;
 import org.telegram.telegrambots.api.objects.User;
 import com.ossel.petrobot.data.Item;
 import com.ossel.petrobot.data.Person;
-import com.ossel.petrobot.data.Request;
-import com.ossel.petrobot.data.enums.BotCommand;
 
 public class Util {
 
@@ -32,57 +30,6 @@ public class Util {
             b.append("\n");
         }
         return b.toString();
-    }
-
-    public static Request getRequestFromMessage(String message) {
-        if (message != null) {
-            if (message.startsWith("/todo_loesche") || message.startsWith("/todo_loeschen"))
-                return new Request(BotCommand.DELETE_TODO_ITEM, getItemFromRawMessage(message));
-            if (message.startsWith("/todolist"))
-                return new Request(BotCommand.SHOW_TODO_LIST, "");
-            if (message.startsWith("/todo"))
-                return new Request(BotCommand.ADD_TODO_ITEM, getItemFromRawMessage(message));
-            if (message.startsWith("/einkaufsliste_loeschen")
-                    || message.startsWith("/einkaufliste_loeschen"))
-                return new Request(BotCommand.DELETE_SHOPPING_LIST, "");
-            if (message.startsWith("/einkaufsliste") || message.startsWith("/einkaufliste"))
-                return new Request(BotCommand.SHOW_SHOPPING_LIST, "");
-            if (message.startsWith("/einkauf"))
-                return new Request(BotCommand.ADD_SHOPPING_ITEM, getItemFromRawMessage(message));
-
-            if (message.startsWith("/pool"))
-                return new Request(BotCommand.SHOW_POOL_TEMPERATURE, "");
-
-            if (message.startsWith("/entendienst"))
-                return new Request(BotCommand.SHOW_DUCK_FATHER, "");
-            if (message.startsWith("/entenpapa") || message.startsWith("/entenmama"))
-                return new Request(BotCommand.CLAIM_DUCK_RESPONSIBILITY, "");
-            if (message.startsWith("/entenpunkte"))
-                return new Request(BotCommand.SHOW_DUCK_STATS, "");
-            if (message.startsWith("/debug"))
-                return new Request(BotCommand.DEBUG, "");
-
-        }
-        return new Request(BotCommand.UNKNOWN, "");
-    }
-
-    private static String getItemFromRawMessage(final String rawMessage) {
-        String text = null;
-        if (rawMessage.startsWith("/todo"))
-            text = rawMessage.substring("/todo".length());
-        if (rawMessage.startsWith("/todo_loesche"))
-            text = rawMessage.substring("/todo_loesche".length());
-        if (rawMessage.startsWith("/todo_loeschen"))
-            text = rawMessage.substring("/todo_loeschen".length());
-        if (rawMessage.startsWith("/einkauf"))
-            text = rawMessage.substring("/einkauf".length());
-        if (text.toLowerCase().startsWith("@petrobot")) {
-            text = text.substring("@petrobot".length());
-        }
-        if (text.startsWith(" ")) {
-            text = text.substring(1);
-        }
-        return text;
     }
 
     public static String getName(User user) {
@@ -126,19 +73,6 @@ public class Util {
             result.append(person.getPoints());
         }
         return result.toString();
-    }
-
-    public static List<Item> toItemList(String message, String username) {
-        ArrayList<Item> items = new ArrayList<>();
-        for (String item : message.split(",")) {
-            if (item != null && !item.isEmpty() && !item.equals(" "))
-                if (item.startsWith(" ")) {
-                    items.add(new Item(item.substring(1), username));
-                } else {
-                    items.add(new Item(item, username));
-                }
-        }
-        return items;
     }
 
     public static boolean isToday(Date time) {

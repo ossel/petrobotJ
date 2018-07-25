@@ -27,7 +27,7 @@ public class Main {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             final PetroBot petroBot = new PetroBot(token, chatId);
-            petroBot.sendStartupMessage();
+            // petroBot.sendStartupMessage();
             telegramBotsApi.registerBot(petroBot);
             Thread t = new Thread(() -> {
                 int counter = 0;

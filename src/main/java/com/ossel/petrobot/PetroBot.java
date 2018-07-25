@@ -9,8 +9,7 @@ import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-import com.ossel.petrobot.data.Item;
-import com.ossel.petrobot.data.Request;
+import com.ossel.petrobot.api.TelegramRequest;
 import com.ossel.petrobot.data.Temperature;
 import com.ossel.petrobot.services.Dao;
 import com.ossel.petrobot.utility.Util;
@@ -34,10 +33,10 @@ public class PetroBot extends TelegramLongPollingBot {
     }
 
     public void onUpdateReceived(Update data) {
-        System.out.println("Update: " + data.toString());
-        Request request = Util.getRequestFromMessage(data.getMessage().getText());
+        LOG.info("Update: " + data.toString());
         String username = Util.getName(data.getMessage().getFrom());
-        LOG.info(request.toString() + "\nRaw: " + data.getMessage().getText());
+        TelegramRequest request = new TelegramRequest(data.getMessage().getText(), username);
+        LOG.info(request.toString());
         switch (request.getCommand()) {
             case SHOW_SHOPPING_LIST: {
                 if (dao.getShoppingList().isEmpty()) {
@@ -49,11 +48,7 @@ public class PetroBot extends TelegramLongPollingBot {
                 break;
             }
             case ADD_SHOPPING_ITEM: {
-                if (request.getItem().contains(",")) {
-                    dao.addShoppingItems(Util.toItemList(request.getItem(), username));
-                } else {
-                    dao.addShoppingItem(new Item(request.getItem(), username));
-                }
+                dao.addShoppingItems(request.getItems());
                 break;
             }
             case DELETE_SHOPPING_LIST: {
@@ -80,19 +75,19 @@ public class PetroBot extends TelegramLongPollingBot {
                 break;
             }
             case ADD_TODO_ITEM: {
-                dao.addTodoItem(new Item(request.getItem(), username));
+                dao.addTodoItems(request.getItems());
                 break;
             }
             case DELETE_TODO_ITEM: {
                 try {
-                    int itemNumber = Integer.parseInt(request.getItem().trim());
+                    int itemNumber = Integer.parseInt(request.getMessage().trim());
                     boolean deleted = dao.deleteTodoItem(itemNumber);
                     if (deleted)
                         sendMessage("Item <" + itemNumber + "> gelöscht.");
                     else
                         sendMessage("Item <" + itemNumber + "> konnte nicht gelöscht werden.");
                 } catch (NumberFormatException e) {
-                    sendMessage("Der Wert <" + request.getItem().trim()
+                    sendMessage("Der Wert <" + request.getMessage().trim()
                             + "> ist keine positive ganze Zahl.");
                 }
                 break;
@@ -138,6 +133,41 @@ public class PetroBot extends TelegramLongPollingBot {
                 }
                 break;
             }
+            case POLL: {
+                if (dao.getPoll() == null) {
+                    // create new poll
+                    if (request.getPoll() == null)
+                        sendMessage(
+                                "Flasches Format! Tippe /umfrage <Frage>? <Option 1>, <Option 2>, <Option 3>, ...");
+                    else {
+                        dao.setPoll(request.getPoll());
+                        sendMessage(request.getPoll().toDisplayString());
+                    }
+                } else {
+                    // poll exists
+                    sendMessage(dao.getPoll().toDisplayString()
+                            + "\n Tippe /umfrage_fertig um diese Umfrage zu beenden.");
+                }
+                break;
+
+            }
+            case POLL_VOTE: {
+                if (dao.getPoll() == null) {
+                    sendMessage(
+                            "Abstimmen fehlgeschlagen. Es gibt derzeit keine Umfrage.\nTippe /umfrage <Frage>? <Option 1>, <Option 2>, <Option 3>, ... um eine neue Umfrage zu starten");
+                } else {
+                    dao.voteForCurrentPoll(Integer.parseInt(request.getMessage()));
+                }
+                break;
+
+            }
+            case POLL_FINISHED: {
+                dao.deletePoll();
+                // sendMessage(
+                // "Umfrage gelöscht.\nTippe /umfrage <Frage>? <Option 1>, <Option 2>, <Option 3>,
+                // ... um eine neue Umfrage zu starten.");
+                break;
+            }
             case DEBUG: {
                 LOG.info("###### DEBUG ######");
                 LOG.info("# duck father: " + dao.getDuckFather());
@@ -145,6 +175,7 @@ public class PetroBot extends TelegramLongPollingBot {
                 LOG.info("# pool temperature: " + dao.getTemperature());
                 LOG.info("# todo: " + Util.formatList(dao.getTodoList()));
                 LOG.info("# shopping: " + Util.formatList(dao.getShoppingList()));
+                LOG.info("# poll: " + dao.getPoll());
                 LOG.info("###### DEBUG ######");
                 break;
             }
@@ -155,6 +186,7 @@ public class PetroBot extends TelegramLongPollingBot {
             default:
                 LOG.warn("unhandled command case");
         }
+
     }
 
     @Override

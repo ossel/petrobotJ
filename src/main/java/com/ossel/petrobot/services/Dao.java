@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.ossel.petrobot.data.Item;
+import com.ossel.petrobot.data.Poll;
 import com.ossel.petrobot.data.Temperature;
 import com.ossel.petrobot.utility.Util;
 
@@ -25,6 +26,7 @@ public class Dao {
     public static final String TODO_LIST = "todo-list.csv";
     public static final String DUCK_FATHER_LIST = "duck-father-list.csv";
     public static final String TEMPERATURE_LIST = "temperature.csv";
+    public static final String POLL_FILE = "poll.csv";
 
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -34,11 +36,13 @@ public class Dao {
     private String duckFather;
     private Date lastClaimTime;
     private Temperature temperature;
+    private Poll poll;
 
     private Dao() {
         shoppingList = read(SHOPPING_LIST);
         todoList = read(TODO_LIST);
         duckStats = readDuckPoints();
+        poll = readPoll();
     }
 
     public static Dao getInstance() {
@@ -49,11 +53,6 @@ public class Dao {
 
     public List<Item> getShoppingList() {
         return shoppingList;
-    }
-
-    public void addShoppingItem(Item item) {
-        shoppingList.add(item);
-        write(SHOPPING_LIST, toCsvString(shoppingList));
     }
 
     public void addShoppingItems(List<Item> itemList) {
@@ -71,8 +70,8 @@ public class Dao {
         return todoList;
     }
 
-    public void addTodoItem(Item item) {
-        todoList.add(item);
+    public void addTodoItems(List<Item> items) {
+        todoList.addAll(items);
         write(TODO_LIST, toCsvString(todoList));
     }
 
@@ -122,6 +121,20 @@ public class Dao {
     public void putTemperature(String value) {
         temperature = new Temperature(value);
         append(TEMPERATURE_LIST, temperature.toCsvString());
+    }
+
+    public void setPoll(Poll poll) {
+        this.poll = poll;
+        write(POLL_FILE, this.poll.toCsvString());
+    }
+
+    public Poll getPoll() {
+        return this.poll;
+    }
+
+    public void deletePoll() {
+        poll = null;
+        write(POLL_FILE, " ");
     }
 
 
@@ -206,6 +219,43 @@ public class Dao {
         return res;
     }
 
+    private Poll readPoll() {
+        Poll result = null;
+        try (BufferedReader br = new BufferedReader(new FileReader(POLL_FILE))) {
 
+            String sCurrentLine;
+            if ((sCurrentLine = br.readLine()) != null) {
+                result = new Poll(sCurrentLine);
+            }
+            int c = 0;
+            while ((sCurrentLine = br.readLine()) != null) {
+                if (sCurrentLine != null && !sCurrentLine.isEmpty() && !sCurrentLine.equals(" ")) {
+                    String option = sCurrentLine.split(",")[0];
+                    result.addOption(option);
+                    try {
+                        int votes = Integer.parseInt(sCurrentLine.split(",")[1]);
+                        result.setVotes(c, votes);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    c++;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public void voteForCurrentPoll(int option) {
+        if (this.poll != null) {
+            this.poll.vote(option);
+            write(POLL_FILE, poll.toCsvString());
+        } else {
+            System.out.println("Warning: No poll");
+        }
+
+    }
 
 }
