@@ -42,7 +42,6 @@ public class Util {
                 return new Request(BotCommand.SHOW_TODO_LIST, "");
             if (message.startsWith("/todo"))
                 return new Request(BotCommand.ADD_TODO_ITEM, getItemFromRawMessage(message));
-
             if (message.startsWith("/einkaufsliste_loeschen")
                     || message.startsWith("/einkaufliste_loeschen"))
                 return new Request(BotCommand.DELETE_SHOPPING_LIST, "");
@@ -60,6 +59,8 @@ public class Util {
                 return new Request(BotCommand.CLAIM_DUCK_RESPONSIBILITY, "");
             if (message.startsWith("/entenpunkte"))
                 return new Request(BotCommand.SHOW_DUCK_STATS, "");
+            if (message.startsWith("/debug"))
+                return new Request(BotCommand.DEBUG, "");
 
         }
         return new Request(BotCommand.UNKNOWN, "");
@@ -110,7 +111,7 @@ public class Util {
             @Override
             public int compare(Person p1, Person p2) {
 
-                return p1.getPoints() - p2.getPoints();
+                return p2.getPoints() - p1.getPoints();
             }
         });
         StringBuilder result = new StringBuilder("Entenpunkte:\n");
