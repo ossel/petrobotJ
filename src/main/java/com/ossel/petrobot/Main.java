@@ -34,12 +34,14 @@ public class Main {
                 while (true) {
                     try {
                         Calendar cal = Calendar.getInstance();
+                        LOG.debug("Petrobot still listening...");
                         if (cal.get(Calendar.HOUR_OF_DAY) >= 18
+                                && cal.get(Calendar.HOUR_OF_DAY) < 24
                                 && Dao.getInstance().getDuckFather() == null) {
                             petroBot.sendRemindingMessage(counter);
-                            counter ++;
+                            counter++;
                             Thread.sleep(1000 * 60 * 30); // wait 30 minutes
-                        }else{
+                        } else {
                             counter = 0;
                         }
                         Thread.sleep(1000 * 60 * 15); // every 15 minutes
