@@ -17,6 +17,9 @@ public class Util {
         StringBuilder b = new StringBuilder();
         int i = 1;
         for (Item item : list) {
+            if (i < 10) {
+                b.append("0");
+            }
             b.append(i++);
             if (item.getText().startsWith(" ")) {
                 b.append(".");

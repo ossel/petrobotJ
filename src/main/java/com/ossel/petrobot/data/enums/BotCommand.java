@@ -11,6 +11,8 @@ public enum BotCommand {
 
     POLL, POLL_FINISHED, POLL_VOTE,
 
+    IGNORE_COMMAND,
+
     DEBUG,
 
     UNKNOWN;

@@ -110,4 +110,10 @@ public class TelegramRequestTest {
         Assert.assertEquals(BotCommand.UNKNOWN, request.getCommand());
     }
 
+    @Test
+    public void testCommandTypo() {
+        TelegramRequest request = new TelegramRequest("/EnteNdienst", "Dany");
+        Assert.assertEquals(BotCommand.SHOW_DUCK_FATHER, request.getCommand());
+    }
+
 }

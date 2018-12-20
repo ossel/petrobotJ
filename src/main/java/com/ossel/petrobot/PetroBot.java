@@ -118,9 +118,9 @@ public class PetroBot extends TelegramLongPollingBot {
                 }
                 Calendar cal = Calendar.getInstance();
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
-                if (hour < 18) {
+                if (hour < 16) {
                     sendMessage(
-                            "Die Enten müssen noch nicht ins Bett. Versuche es ab 18:00 erneut!");
+                            "Die Enten müssen noch nicht ins Bett. Versuche es ab 16:00 erneut!");
                 } else {
                     Map<String, Integer> duckStats = dao.setDuckFather(username);
                     if (duckStats.get(username) != 1) {
@@ -177,6 +177,10 @@ public class PetroBot extends TelegramLongPollingBot {
                 LOG.info("# shopping: " + Util.formatList(dao.getShoppingList()));
                 LOG.info("# poll: " + dao.getPoll());
                 LOG.info("###### DEBUG ######");
+                break;
+            }
+            case IGNORE_COMMAND: {
+                LOG.info("Ignore command: " + request);
                 break;
             }
             case UNKNOWN: {

@@ -26,69 +26,70 @@ public class TelegramRequest {
         this.rawMessage = rawMessage;
         this.command = BotCommand.UNKNOWN;
         if (rawMessage != null) {
-            if (rawMessage.startsWith("/todo_loeschen")) {
+            if (rawMessage.toLowerCase().startsWith("/todo_loeschen")) {
                 this.command = BotCommand.DELETE_TODO_ITEM;
                 this.message = removeCommandPrefix(rawMessage, "/todo_loeschen");
             } else if (rawMessage.startsWith("/todo_loesche")) {
                 this.command = BotCommand.DELETE_TODO_ITEM;
-                this.message = removeCommandPrefix(rawMessage, "/todo_loesche");
-            } else if (rawMessage.startsWith("/todoliste")) {
+                this.message = removeCommandPrefix(rawMessage.toLowerCase(), "/todo_loesche");
+            } else if (rawMessage.toLowerCase().startsWith("/todoliste")) {
                 this.command = BotCommand.SHOW_TODO_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/todoliste");
-            } else if (rawMessage.startsWith("/todolist")) {
+            } else if (rawMessage.toLowerCase().startsWith("/todolist")) {
                 this.command = BotCommand.SHOW_TODO_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/todolist");
-            } else if (rawMessage.startsWith("/todo")) {
+            } else if (rawMessage.toLowerCase().startsWith("/todo")) {
                 this.command = BotCommand.ADD_TODO_ITEM;
                 this.message = removeCommandPrefix(rawMessage, "/todo");
                 this.items = getItemListFromMessage(message);
-            } else if (rawMessage.startsWith("/einkaufsliste_loeschen")) {
+            } else if (rawMessage.toLowerCase().startsWith("/einkaufsliste_loeschen")) {
                 this.command = BotCommand.DELETE_SHOPPING_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/einkaufsliste_loeschen");
-            } else if (rawMessage.startsWith("/einkaufliste_loeschen")) {
+            } else if (rawMessage.toLowerCase().startsWith("/einkaufliste_loeschen")) {
                 this.command = BotCommand.DELETE_SHOPPING_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/einkaufliste_loeschen");
-            } else if (rawMessage.startsWith("/einkaufsliste")) {
+            } else if (rawMessage.toLowerCase().startsWith("/einkaufsliste")) {
                 this.command = BotCommand.SHOW_SHOPPING_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/einkaufsliste");
-            } else if (rawMessage.startsWith("/einkaufliste")) {
+            } else if (rawMessage.toLowerCase().startsWith("/einkaufliste")) {
                 this.command = BotCommand.SHOW_SHOPPING_LIST;
                 this.message = removeCommandPrefix(rawMessage, "/einkaufliste");
-            } else if (rawMessage.startsWith("/einkauf")) {
+            } else if (rawMessage.toLowerCase().startsWith("/einkauf")) {
                 this.command = BotCommand.ADD_SHOPPING_ITEM;
                 this.message = removeCommandPrefix(rawMessage, "/einkauf");
                 this.items = getItemListFromMessage(this.message);
-            } else if (rawMessage.startsWith("/pool")) {
+            } else if (rawMessage.toLowerCase().startsWith("/pool")) {
                 this.command = BotCommand.SHOW_POOL_TEMPERATURE;
                 this.message = removeCommandPrefix(rawMessage, "/pool");
-            } else if (rawMessage.startsWith("/entendienst")) {
+            } else if (rawMessage.toLowerCase().startsWith("/entendienst")) {
                 this.command = BotCommand.SHOW_DUCK_FATHER;
                 this.message = removeCommandPrefix(rawMessage, "/entendienst");
-            } else if (rawMessage.startsWith("/entenpapa")) {
+            } else if (rawMessage.toLowerCase().startsWith("/entenpapa")) {
                 this.command = BotCommand.CLAIM_DUCK_RESPONSIBILITY;
                 this.message = removeCommandPrefix(rawMessage, "/entenpapa");
-            } else if (rawMessage.startsWith("/entenmama")) {
+            } else if (rawMessage.toLowerCase().startsWith("/entenmama")) {
                 this.command = BotCommand.CLAIM_DUCK_RESPONSIBILITY;
                 this.message = removeCommandPrefix(rawMessage, "/entenmama");
-            } else if (rawMessage.startsWith("/entenpunkte")) {
+            } else if (rawMessage.toLowerCase().startsWith("/entenpunkte")) {
                 this.command = BotCommand.SHOW_DUCK_STATS;
                 this.message = removeCommandPrefix(rawMessage, "/entenpunkte");
-            } else if (rawMessage.startsWith("/umfrage_fertig")) {
+            } else if (rawMessage.toLowerCase().startsWith("/umfrage_fertig")) {
                 this.command = BotCommand.POLL_FINISHED;
                 this.message = removeCommandPrefix(rawMessage, "/umfrage_fertig");
-            } else if (rawMessage.startsWith("/umfrage")) {
+            } else if (rawMessage.toLowerCase().startsWith("/umfrage")) {
                 this.command = BotCommand.POLL;
                 this.message = removeCommandPrefix(rawMessage, "/umfrage");
                 this.poll = getPollFromMessage(this.message);
-            } else if (rawMessage.startsWith("/debug")) {
+            } else if (rawMessage.toLowerCase().startsWith("/debug")) {
                 this.command = BotCommand.DEBUG;
                 this.message = removeCommandPrefix(rawMessage, "/debug");
+            } else if (rawMessage.toLowerCase().startsWith("/start")) {
+                this.command = BotCommand.IGNORE_COMMAND;
+                this.message = rawMessage;
             } else if (Character.isDigit(rawMessage.charAt(1))) {
                 this.command = BotCommand.POLL_VOTE;
                 this.message = String.valueOf(rawMessage.charAt(1));
             }
-
-
 
         }
     }

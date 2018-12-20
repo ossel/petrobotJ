@@ -35,7 +35,7 @@ public class Main {
                     try {
                         Calendar cal = Calendar.getInstance();
                         LOG.debug("Petrobot still listening...");
-                        if (cal.get(Calendar.HOUR_OF_DAY) >= 18
+                        if (cal.get(Calendar.HOUR_OF_DAY) >= 17
                                 && cal.get(Calendar.HOUR_OF_DAY) < 24
                                 && Dao.getInstance().getDuckFather() == null) {
                             petroBot.sendRemindingMessage(counter);
